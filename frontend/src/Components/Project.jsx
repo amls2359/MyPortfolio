@@ -18,7 +18,7 @@ import React from 'react';
           image: '/Portfolio.png',
           technologies: ['React', 'Tailwind CSS', 'javascript','express.js','mongodb','node.js'],
           liveUrl: 'https://example.com',
-          githubUrl: 'https://github.com'
+          githubUrl: 'https://github.com/amls2359/MyPortfolio'
 
         }
       ];

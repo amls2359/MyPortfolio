@@ -4,6 +4,7 @@ import React, { useState } from 'react';
     import { zodResolver } from '@hookform/resolvers/zod';
     import { z } from 'zod';
     import { Mail, Phone, MapPin, Send } from 'lucide-react';
+    import Swal from 'sweetalert2';
    
 
 const contactSchema = z.object({
@@ -64,21 +65,42 @@ const onSubmit = async (data) => {
     const result = await response.json();
 
     if (result.success) {
-      alert("Message sent successfully ✅");
-      reset(); // clear form
+      Swal.fire({
+        toast: true,
+        position: "top", // top-end, bottom-end, bottom-start, etc.
+        icon: "success",
+        title: "Message sent successfully ✅",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+      reset();
     } else {
-      alert("❌ Failed to send message: " + result.error);
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "error",
+        title: result.error || "Failed to send message ❌",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
     }
   } catch (error) {
     console.error(error);
-    alert("❌ Something went wrong while sending message.");
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "error",
+      title: "Something went wrong ❌",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+    });
   } finally {
     setIsSubmitting(false);
   }
 };
-
-
-
 
       const contactInfo = [
         {
