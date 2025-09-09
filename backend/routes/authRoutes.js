@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const axios = require('axios');
+const nodemailer = require('nodemailer');
 
 require('dotenv').config();
 
@@ -50,32 +50,38 @@ router.post('/login', async (req, res) => {
 
 });
 
-router.post("/send-sms", async (req, res) => {
-  const { name, email, phone, subject, message } = req.body;
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_ADDRESS, // your Gmail
+    pass: process.env.EMAIL_PASSWORD    // 16-char app password
+  },
+});
 
+router.post("/send-email", async (req, res) => {
   try {
-    // Example for Fast2SMS
-    const response = await fetch("https://www.fast2sms.com/dev/bulkV2", {
-      method: "POST",
-      headers: {
-        "authorization": process.env.FAST2SMS_API_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        route: "q",
-        sender_id: "TXTIND",
-        message: `New Contact Form Submission\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nSubject: ${subject}\nMessage: ${message}`,
-        language: "english",
-        flash: 0,
-        numbers: process.env.RECEIVER_PHONE_NUMBER // your number in .env
-      })
-    });
+    const { name, email, phone, subject, message } = req.body;
 
-    const data = await response.json();
-    res.status(200).json({ success: true, data });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: "Failed to send SMS" });
+const mailOptions = {
+  from: `"${name} via Portfolio Contact" <${process.env.EMAIL_ADDRESS}>`,
+  to: process.env.EMAIL_ADDRESS, // You receive it
+  replyTo: email, // User’s email (so you can reply directly)
+  subject: `📩 New Contact Form Submission: ${subject}`,
+  text: `
+    Name: ${name}
+    Email: ${email}
+    Phone: ${phone}
+    Subject: ${subject}
+    Message: ${message}
+  `,
+};
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.json({ success: false, error: error.message });
   }
 });
 
