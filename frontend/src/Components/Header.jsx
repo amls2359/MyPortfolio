@@ -24,20 +24,28 @@ const Header = () => {
   }, [isDarkMode]);
 
   const navItems = [
-    { name: 'Home', href: '#home' },
+    { name: 'Home', href: '#header' },
     { name: 'About', href: '#about' },
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
     { name: 'Contact', href: '#contact' }
   ];
 
-  const scrollToSection = (href) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMenuOpen(false);
-  };
+ const scrollToSection = (href) => {
+  const element = document.querySelector(href);
+  if (element) {
+    const headerOffset = 80; // adjust this to match your header height
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = elementPosition - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth"
+    });
+  }
+  setIsMenuOpen(false);
+};
+
 
   return (
     <motion.header
