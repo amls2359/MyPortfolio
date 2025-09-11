@@ -21,11 +21,8 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    if (isDarkMode) document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
     try {
       localStorage.setItem('dark', JSON.stringify(isDarkMode));
     } catch {}
@@ -38,32 +35,28 @@ const Header = () => {
     { name: 'Skills', href: '#skills' },
     { name: 'Contact', href: '#contact' }
   ];
-const scrollToSection = (href) => {
-  const el = document.querySelector(href);
-  if (!el) {
-    console.warn("scrollToSection: target not found for", href);
-    setIsMenuOpen(false);
-    return;
-  }
 
-  const headerHeight = headerRef.current?.offsetHeight ?? 64;
+  // ✅ Production-safe scroll function
+  const scrollToSection = (href) => {
+    const el = document.querySelector(href);
+    if (!el) {
+      console.warn('scrollToSection: target not found for', href);
+      setIsMenuOpen(false);
+      return;
+    }
 
-  if (isMenuOpen) {
-    // Close menu and wait for animation to finish before scrolling
+    const headerHeight = headerRef.current?.offsetHeight ?? 64;
+
+    // Close mobile menu first
     setIsMenuOpen(false);
-    setTimeout(() => {
+
+    // Use requestAnimationFrame to scroll after layout updates
+    requestAnimationFrame(() => {
       const elementPosition = el.getBoundingClientRect().top + window.scrollY;
       const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }, 300); // matches your AnimatePresence exit transition (0.25s + buffer)
-  } else {
-    // If menu is already closed, scroll immediately
-    const elementPosition = el.getBoundingClientRect().top + window.scrollY;
-    const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
-    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-  }
-};
-
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    });
+  };
 
   return (
     <motion.header
