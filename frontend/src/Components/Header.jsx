@@ -38,7 +38,6 @@ const Header = () => {
     { name: 'Skills', href: '#skills' },
     { name: 'Contact', href: '#contact' }
   ];
-
 const scrollToSection = (href) => {
   const el = document.querySelector(href);
   if (!el) {
@@ -49,28 +48,22 @@ const scrollToSection = (href) => {
 
   const headerHeight = headerRef.current?.offsetHeight ?? 64;
 
-  // Close menu first
-  const wasMenuOpen = isMenuOpen;
-  setIsMenuOpen(false);
-
-  // Use RAF loop to wait until DOM reflow is complete after menu close
-  let rafId;
-  const scrollWhenReady = () => {
+  if (isMenuOpen) {
+    // Close menu and wait for animation to finish before scrolling
+    setIsMenuOpen(false);
+    setTimeout(() => {
+      const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    }, 300); // matches your AnimatePresence exit transition (0.25s + buffer)
+  } else {
+    // If menu is already closed, scroll immediately
     const elementPosition = el.getBoundingClientRect().top + window.scrollY;
     const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
-
-    if (wasMenuOpen && el.getBoundingClientRect().top < headerHeight) {
-      // Menu probably still closing, wait for next frame
-      rafId = requestAnimationFrame(scrollWhenReady);
-      return;
-    }
-
     window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    cancelAnimationFrame(rafId);
-  };
-
-  rafId = requestAnimationFrame(scrollWhenReady);
+  }
 };
+
 
   return (
     <motion.header
