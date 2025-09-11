@@ -40,28 +40,36 @@ const Header = () => {
   ];
 
 const scrollToSection = (href) => {
-  const target = document.querySelector(href);
+  const el = document.querySelector(href);
+  if (!el) {
+    console.warn("scrollToSection: target not found for", href);
+    setIsMenuOpen(false);
+    return;
+  }
 
-  // Close menu immediately (so layout adjusts first)
+  const headerHeight = headerRef.current?.offsetHeight ?? 64;
+
+  // Close menu first
   const wasMenuOpen = isMenuOpen;
   setIsMenuOpen(false);
 
-  // Use requestAnimationFrame to wait for layout update
-  setTimeout(() => {
-    if (!target) {
-      console.warn("scrollToSection: target not found for", href);
+  // Use RAF loop to wait until DOM reflow is complete after menu close
+  let rafId;
+  const scrollWhenReady = () => {
+    const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
+
+    if (wasMenuOpen && el.getBoundingClientRect().top < headerHeight) {
+      // Menu probably still closing, wait for next frame
+      rafId = requestAnimationFrame(scrollWhenReady);
       return;
     }
 
-    const headerHeight = headerRef.current?.offsetHeight ?? 64;
-    const elementPosition = target.getBoundingClientRect().top + window.scrollY;
-    const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
+    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    cancelAnimationFrame(rafId);
+  };
 
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth",
-    });
-  }, wasMenuOpen ? 350 : 50); // wait a bit longer if menu was open
+  rafId = requestAnimationFrame(scrollWhenReady);
 };
 
   return (
