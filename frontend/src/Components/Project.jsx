@@ -16,7 +16,7 @@ import React from 'react';
           title:'Portfolio website',
           description: 'A personal portfolio website to showcase projects, skills, and experience. Built with React and Tailwind CSS, featuring smooth animations and responsive design.',
           image: '/Portfolio.png',
-          technologies: ['React', 'Tailwind CSS', 'javascript','express.js','mongodb','node.js'],
+          technologies: ['React', 'Tailwind CSS', 'javascript','express.js','node.js'],
           liveUrl: 'https://example.com',
           githubUrl: 'https://github.com/amls2359/MyPortfolio'
 
