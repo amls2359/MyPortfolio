@@ -40,30 +40,28 @@ const Header = () => {
   ];
 
 const scrollToSection = (href) => {
-  const el = document.querySelector(href);
-  if (!el) {
-    console.warn("scrollToSection: target not found for", href);
-    setIsMenuOpen(false);
-    return;
-  }
+  const target = document.querySelector(href);
 
-  const headerHeight = headerRef.current?.offsetHeight ?? 64;
-
-  // Close the menu first, but trigger scroll AFTER it's closed
+  // Close menu immediately (so layout adjusts first)
+  const wasMenuOpen = isMenuOpen;
   setIsMenuOpen(false);
 
-  // Wait long enough for the menu closing animation to finish
-  const DELAY_MS = isMenuOpen ? 300 : 0; // longer delay if menu was open
-
+  // Use requestAnimationFrame to wait for layout update
   setTimeout(() => {
-    const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+    if (!target) {
+      console.warn("scrollToSection: target not found for", href);
+      return;
+    }
+
+    const headerHeight = headerRef.current?.offsetHeight ?? 64;
+    const elementPosition = target.getBoundingClientRect().top + window.scrollY;
     const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
 
     window.scrollTo({
       top: offsetPosition,
       behavior: "smooth",
     });
-  }, DELAY_MS);
+  }, wasMenuOpen ? 350 : 50); // wait a bit longer if menu was open
 };
 
   return (
