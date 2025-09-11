@@ -8,7 +8,7 @@ import React from 'react';
           title: 'E-Commerce Platform',
           description: 'A full-stack e-commerce solution with React, Node.js, and Stripe integration. Features include user authentication, product management, and real-time inventory tracking.',
           image: '/obscura-footwear.png',
-          technologies: ['React', 'Node.js', 'MongoDB', 'Stripe', 'Tailwind CSS'],
+          technologies: ['Html','Css', 'Javascript', 'Node.js', 'Express.js', 'Mongodb'],
           liveUrl: 'https://obscura-footwear-1.onrender.com',
           githubUrl: 'https://github.com/amls2359/Obscura-Footwear'
         },
@@ -16,8 +16,8 @@ import React from 'react';
           title:'Portfolio website',
           description: 'A personal portfolio website to showcase projects, skills, and experience. Built with React and Tailwind CSS, featuring smooth animations and responsive design.',
           image: '/Portfolio.png',
-          technologies: ['React', 'Tailwind CSS', 'javascript','express.js','node.js'],
-          liveUrl: 'https://example.com',
+          technologies: ['React', 'Tailwind CSS', 'javascript','Express.js','Node.js'],
+          liveUrl: 'https://myportfolio-nvh4.onrender.com',
           githubUrl: 'https://github.com/amls2359/MyPortfolio'
 
         }
