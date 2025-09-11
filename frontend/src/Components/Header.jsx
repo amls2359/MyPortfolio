@@ -24,7 +24,7 @@ const Header = () => {
   }, [isDarkMode]);
 
   const navItems = [
-    { name: 'Home', href: '#header' },
+    { name: 'Home', href: '#hero' },
     { name: 'About', href: '#about' },
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
