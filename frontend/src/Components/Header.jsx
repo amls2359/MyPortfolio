@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState();
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('dark') || 'false');
+    } catch {
+      return false;
+    }
+  });
   const [isScrolled, setIsScrolled] = useState(false);
+  const headerRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -21,6 +26,9 @@ const Header = () => {
     } else {
       document.documentElement.classList.remove('dark');
     }
+    try {
+      localStorage.setItem('dark', JSON.stringify(isDarkMode));
+    } catch {}
   }, [isDarkMode]);
 
   const navItems = [
@@ -31,27 +39,34 @@ const Header = () => {
     { name: 'Contact', href: '#contact' }
   ];
 
- const scrollToSection = (href) => {
-  const element = document.querySelector(href);
-  if (element) {
-    const headerOffset = 80; // adjust this to match your header height
-    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-    const offsetPosition = elementPosition - headerOffset;
+  const scrollToSection = (href) => {
+    const el = document.querySelector(href);
+    if (!el) {
+      console.warn('scrollToSection: target not found for', href);
+      setIsMenuOpen(false);
+      return;
+    }
 
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth"
-    });
-  }
-  setIsMenuOpen(false);
-};
+    const headerHeight = headerRef.current?.offsetHeight ?? 64;
 
+    // Close menu first so overlay/height changes don't interfere with scrolling.
+    setIsMenuOpen(false);
+
+    // Small delay to allow menu closing animation/layout change to finish.
+    const DELAY_MS = 80;
+    setTimeout(() => {
+      const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = Math.max(0, elementPosition - headerHeight - 8); // 8px breathing room
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }, DELAY_MS);
+  };
 
   return (
     <motion.header
+      ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-lg' 
+        isScrolled
+          ? 'bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-lg'
           : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
@@ -60,30 +75,26 @@ const Header = () => {
     >
       <nav className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between h-16">
-          
-          {/* Left Side - Logo */}
           <motion.div
             className="flex-shrink-0"
             whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
           >
             <h1 className="text-3xl font-extrabold font-montserrat bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 bg-clip-text text-transparent animate-text">
               AMAL's Portfolio
             </h1>
           </motion.div>
 
-          {/* Right Side - Navigation + Theme + Mobile Menu */}
           <div className="flex items-center space-x-8">
-            
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-baseline space-x-8">
               {navItems.map((item) => (
                 <motion.button
                   key={item.name}
+                  type="button"
                   onClick={() => scrollToSection(item.href)}
                   className="text-zinc-800 dark:text-zinc-200 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-xl font-large font-inter transition-colors duration-200 relative group"
                   whileHover={{ y: -2 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 >
                   {item.name}
                   <span className="absolute inset-x-0 bottom-0 h-0.5 bg-indigo-600 dark:bg-indigo-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
@@ -91,11 +102,10 @@ const Header = () => {
               ))}
             </div>
 
-            {/* Theme Toggle & Mobile Menu Button */}
             <div className="flex items-center space-x-4">
-              {/* Dark Mode Toggle */}
               <motion.button
-                onClick={() => setIsDarkMode(!isDarkMode)}
+                type="button"
+                onClick={() => setIsDarkMode((s) => !s)}
                 className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-700 transition-colors duration-200"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -104,14 +114,15 @@ const Header = () => {
                 {isDarkMode ? <Sun size={25} /> : <Moon size={25} />}
               </motion.button>
 
-              {/* Mobile Menu Button */}
               <div className="md:hidden">
                 <motion.button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  type="button"
+                  onClick={() => setIsMenuOpen((s) => !s)}
                   className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-700 transition-colors duration-200"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label="Toggle menu"
+                  aria-expanded={isMenuOpen}
                 >
                   {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
                 </motion.button>
@@ -120,24 +131,25 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {isMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25 }}
               className="md:hidden bg-white dark:bg-zinc-900 border-t border-slate-200 dark:border-zinc-700"
+              style={{ overflow: 'hidden' }}
             >
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navItems.map((item) => (
                   <motion.button
                     key={item.name}
+                    type="button"
                     onClick={() => scrollToSection(item.href)}
                     className="block w-full text-left px-3 py-2 text-base font-medium font-inter text-zinc-800 dark:text-zinc-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-zinc-800 rounded-md transition-colors duration-200"
                     whileHover={{ x: 4 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                   >
                     {item.name}
                   </motion.button>
