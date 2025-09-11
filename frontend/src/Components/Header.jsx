@@ -53,7 +53,7 @@ const Header = () => {
     setIsMenuOpen(false);
 
     // Small delay to allow menu closing animation/layout change to finish.
-    const DELAY_MS = 80;
+    const DELAY_MS = 150;
     setTimeout(() => {
       const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = Math.max(0, elementPosition - headerHeight - 8); // 8px breathing room
