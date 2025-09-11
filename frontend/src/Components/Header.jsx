@@ -39,27 +39,28 @@ const Header = () => {
     { name: 'Contact', href: '#contact' }
   ];
 
-  const scrollToSection = (href) => {
+const scrollToSection = (href) => {
+  // Close menu first to avoid layout shift issues
+  setIsMenuOpen(false);
+
+  // Add a slightly longer delay to ensure React has rendered everything in production
+  setTimeout(() => {
     const el = document.querySelector(href);
     if (!el) {
-      console.warn('scrollToSection: target not found for', href);
-      setIsMenuOpen(false);
+      console.warn("scrollToSection: target not found for", href);
       return;
     }
 
     const headerHeight = headerRef.current?.offsetHeight ?? 64;
+    const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
 
-    // Close menu first so overlay/height changes don't interfere with scrolling.
-    setIsMenuOpen(false);
-
-    // Small delay to allow menu closing animation/layout change to finish.
-    const DELAY_MS = 150;
-    setTimeout(() => {
-      const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = Math.max(0, elementPosition - headerHeight - 8); // 8px breathing room
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-    }, DELAY_MS);
-  };
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  }, 200); // increased delay slightly for production reliability
+};
 
   return (
     <motion.header
