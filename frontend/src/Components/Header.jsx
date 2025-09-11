@@ -40,18 +40,22 @@ const Header = () => {
   ];
 
 const scrollToSection = (href) => {
-  // Close menu first to avoid layout shift issues
+  const el = document.querySelector(href);
+  if (!el) {
+    console.warn("scrollToSection: target not found for", href);
+    setIsMenuOpen(false);
+    return;
+  }
+
+  const headerHeight = headerRef.current?.offsetHeight ?? 64;
+
+  // Close the menu first, but trigger scroll AFTER it's closed
   setIsMenuOpen(false);
 
-  // Add a slightly longer delay to ensure React has rendered everything in production
-  setTimeout(() => {
-    const el = document.querySelector(href);
-    if (!el) {
-      console.warn("scrollToSection: target not found for", href);
-      return;
-    }
+  // Wait long enough for the menu closing animation to finish
+  const DELAY_MS = isMenuOpen ? 300 : 0; // longer delay if menu was open
 
-    const headerHeight = headerRef.current?.offsetHeight ?? 64;
+  setTimeout(() => {
     const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
     const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
 
@@ -59,7 +63,7 @@ const scrollToSection = (href) => {
       top: offsetPosition,
       behavior: "smooth",
     });
-  }, 200); // increased delay slightly for production reliability
+  }, DELAY_MS);
 };
 
   return (
