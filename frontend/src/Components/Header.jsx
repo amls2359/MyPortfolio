@@ -41,24 +41,21 @@ const Header = () => {
 const scrollToSection = (href) => {
   setIsMenuOpen(false);
 
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     const el = document.querySelector(href);
-      console.log("scrollToSection href:", href, "found:", !!el);
-    if (!el) {
-      console.warn('scrollToSection: target not found for', href);
-      return;
-    }
+    console.log("scrollToSection:", href, "found:", !!el);
+    if (!el) return;
 
-    // First scroll into view
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const headerHeight = headerRef.current?.offsetHeight ?? 64;
+    const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
 
-    // Then adjust for sticky header height
-    setTimeout(() => {
-      const headerHeight = headerRef.current?.offsetHeight ?? 64;
-      window.scrollBy({ top: -headerHeight - 8, behavior: 'instant' });
-    }, 300); // wait for smooth scroll to start, then adjust
-  });
+    console.log("Scrolling to:", offsetPosition, "Header height:", headerHeight);
+
+    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+  }, 50); // small delay to avoid layout shift issues
 };
+
 
 
   return (
