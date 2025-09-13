@@ -141,3 +141,6 @@
   animation: border-animation 3s linear infinite;
 }
 
+html {
+  scroll-behavior: smooth;
+}
