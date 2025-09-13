@@ -36,13 +36,14 @@ const Header = () => {
     { name: 'Contact', href: '#contact' }
   ];
 
-  // ✅ Production-safe scroll function
+
 // ✅ Updated scrollToSection with scrollIntoView + header offset
 const scrollToSection = (href) => {
   setIsMenuOpen(false);
 
   requestAnimationFrame(() => {
     const el = document.querySelector(href);
+      console.log("scrollToSection href:", href, "found:", !!el);
     if (!el) {
       console.warn('scrollToSection: target not found for', href);
       return;
