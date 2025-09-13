@@ -37,26 +37,28 @@ const Header = () => {
   ];
 
   // ✅ Production-safe scroll function
-  const scrollToSection = (href) => {
+// ✅ Updated scrollToSection with scrollIntoView + header offset
+const scrollToSection = (href) => {
+  setIsMenuOpen(false);
+
+  requestAnimationFrame(() => {
     const el = document.querySelector(href);
     if (!el) {
       console.warn('scrollToSection: target not found for', href);
-      setIsMenuOpen(false);
       return;
     }
 
-    const headerHeight = headerRef.current?.offsetHeight ?? 64;
+    // First scroll into view
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // Close mobile menu first
-    setIsMenuOpen(false);
+    // Then adjust for sticky header height
+    setTimeout(() => {
+      const headerHeight = headerRef.current?.offsetHeight ?? 64;
+      window.scrollBy({ top: -headerHeight - 8, behavior: 'instant' });
+    }, 300); // wait for smooth scroll to start, then adjust
+  });
+};
 
-    // Use requestAnimationFrame to scroll after layout updates
-    requestAnimationFrame(() => {
-      const elementPosition = el.getBoundingClientRect().top + window.scrollY;
-      const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-    });
-  };
 
   return (
     <motion.header
