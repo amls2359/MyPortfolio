@@ -22,8 +22,6 @@ const Projects = () => {
         'React',
         'TypeScript',
         'Tailwind CSS',
-        'Radix UI',
-        'Zustand',
         'NestJS',
         'AWS Lambda',
         'DynamoDB',
