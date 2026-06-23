@@ -65,10 +65,10 @@ import React from 'react';
                 className="space-y-6"
               >
                 <p className="text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-['Open_Sans']">
-                  Hi, I’m Amal, a passionate MERN stack developer with strong problem-solving skills and a love for building efficient, user-friendly applications. I have hands-on experience developing projects using JavaScript, Node.js, MongoDB, and React, and I’ve solved over 80+ coding challenges on LeetCode, sharpening my logic and coding ability..
+                Hi, I’m Amal, a Full Stack Developer with one year of professional experience in designing and developing modern web applications. I specialize in the MERN stack, working with React.js, Node.js, Express.js, and MongoDB to create efficient, responsive, and scalable solutions. With a strong foundation in JavaScript and problem-solving, I enjoy building clean, user-focused applications and continuously improving my technical skills through coding challenges and real-world projects...
                 </p>
                 <p className="text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-['Open_Sans']">
-                  I’m a self-learner who enjoys exploring new technologies, and I strongly believe in continuous improvement. Along with my technical skills, I bring leadership qualities gained from my past work experience in a direct selling company, where I also learned the value of teamwork and adaptability.
+                I’m a self-learner who enjoys exploring new technologies and believe in continuous improvement. Beyond my technical expertise, my professional experience has helped me develop strong leadership qualities, including ownership, collaboration, problem-solving, and effective communication. My past experience in a direct selling company further strengthened my teamwork, adaptability, and ability to work with diverse groups of people.
                 </p>
                 <p className="text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-['Open_Sans']">
                  If given the opportunity, I will contribute my best to create impactful solutions and grow as a developer while adding value to the team I work with.

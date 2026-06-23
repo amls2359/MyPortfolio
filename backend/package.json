@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:frontend": "npm run build --prefix ../frontend",
+    "prestart": "npm run build:frontend",
     "start": "node server.js",
-    "dev":"nodemon server.js"
+    "predev": "npm run build:frontend",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
