@@ -3,13 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-"scripts": {
-  "build:frontend": "cd ../frontend && npm ci --include=dev && chmod +x node_modules/.bin/react-scripts && npm run build",
-  "prestart": "npm run build:frontend",
-  "start": "node server.js",
-  "predev": "npm run build:frontend",
-  "dev": "nodemon server.js"
-},
+  "scripts": {
+    "build:frontend": "cd ../frontend && npm ci --include=dev && npm run build",
+    "start": "node server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
