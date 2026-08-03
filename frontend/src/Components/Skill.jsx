@@ -20,6 +20,7 @@ const Skills = () => {
         { name: 'Node.js', level: 90 },
         { name: 'Express.js', level: 90 },
         { name: 'REST APIs', level: 95 },
+        { name: 'FastAPI', level: 50 },
         { name: 'Nestjs', level: 80 }
       ]
     },
@@ -43,6 +44,12 @@ const Skills = () => {
         { name: 'framer', level: 80 },
         { name: 'Cursor', level: 80 },
         { name: 'Antigravity', level: 80 },
+        { name: 'Vercel', level: 80 },
+        { name: 'Render', level: 80 },
+        { name: 'Docker', level: 80 },
+        { name: 'Redis', level: 50 },
+        { name: 'claudeai', level: 50 },
+
       ]
     }
   ];

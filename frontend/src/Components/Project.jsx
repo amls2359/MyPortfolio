@@ -31,6 +31,38 @@ const Projects = () => {
       ],
     },
     {
+      title: 'SmartPDF',
+      subtitle: 'RAG Document Q&A Application',
+      description:
+        'A Retrieval-Augmented Generation app that turns static PDFs into an interactive chat experience. Users upload a document and ask natural-language questions grounded only in that file’s content — not the model’s general knowledge.',
+      image: '/RAG_CHATBOT.png',
+      highlights: [
+        'Built a full RAG pipeline with LangChain, Gemini embeddings, FAISS vector search, and Groq-hosted Llama 3.3 70B for grounded answers.',
+        'Optimized for a free-tier stack (Gemini, Groq, Render, Vercel) while keeping production functionality intact.',
+        'Solved Render’s 512MB memory limit by replacing heavier LangGraph utilities with lightweight LCEL primitives.',
+        'Added graceful handling for edge cases like scanned/image-only PDFs with clear user-facing error messages.',
+      ],
+      technologies: [
+        'React',
+        'Vite',
+        'Tailwind CSS',
+        'Javascript',
+        'Python',
+        'Vercel',
+        'Render',
+        'FastAPI',
+        'LangChain',
+        'Gemini',
+        'FAISS',
+        'Groq',
+        'Llama 3.3',
+        'Redis',
+        'Docker',
+      ],
+      liveUrl: 'https://rag-chatbot-pi-green.vercel.app/',
+      githubUrl: 'https://github.com/amls2359/RAG-chatbot',
+    },
+    {
       title: 'E-Commerce Platform',
       description:
         'A full-stack e-commerce solution with React, Node.js, and Stripe integration. Features include user authentication, product management, and real-time inventory tracking.',
