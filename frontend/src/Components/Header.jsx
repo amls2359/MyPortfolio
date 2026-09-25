@@ -39,21 +39,17 @@ const Header = () => {
 
 // ✅ Updated scrollToSection with scrollIntoView + header offset
 const scrollToSection = (href) => {
-  alert(`Trying to scroll to: ${href}`);
   setIsMenuOpen(false);
 
   setTimeout(() => {
     const el = document.querySelector(href);
     if (!el) {
-      alert("Element not found: " + href);
       return;
     }
 
     const headerHeight = headerRef.current?.offsetHeight ?? 64;
     const elementPosition = el.getBoundingClientRect().top + window.scrollY;
     const offsetPosition = Math.max(0, elementPosition - headerHeight - 8);
-
-    alert(`Found element, scrolling to: ${offsetPosition}`);
     window.scrollTo({ top: offsetPosition, behavior: "smooth" });
   }, 50);
 };
